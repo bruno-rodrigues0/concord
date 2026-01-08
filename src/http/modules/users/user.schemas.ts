@@ -4,6 +4,7 @@ export const createUserBodySchema = z.object({
   username: z.string().min(1),
   email: z.email().min(5).trim(),
   password: z.string().min(8),
+  nickname: z.string().min(3),
 });
 
 export const getByUsernameParamsSchema = z.object({

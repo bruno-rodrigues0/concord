@@ -2,7 +2,7 @@ import type { User } from "@/app/@types/types";
 import { prisma } from "@/database/prisma";
 import { bcryptService } from "@/services/bcrypt.service";
 
-type CreateUserProps = User & {
+type CreateUserProps = Omit<User, "id"> & {
   nickname: string;
 };
 
