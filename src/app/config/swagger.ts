@@ -4,9 +4,9 @@ import type { FastifyDynamicSwaggerOptions } from "@fastify/swagger";
 export const swaggerConfig: FastifyDynamicSwaggerOptions = {
   openapi: {
     info: {
-      title: "Fastify + Swagger API",
-      description: "Test API to learn fastify and swagger",
-      version: "1.0.0",
+      title: "Web Online Chat",
+      description: "A online web chat.",
+      version: "0.0.1",
     },
   },
   transform: jsonSchemaTransform,

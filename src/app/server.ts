@@ -4,11 +4,12 @@ import {
   serializerCompiler,
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
-import { registerSwagger } from "./plugins/swagger";
-import { registerCors } from "./plugins/cors";
-import { registerScalar } from "./plugins/scalar";
-import { loggerConfig } from "./config/logger";
-import { registerRoutes } from "./plugins/routes";
+import { registerSwagger } from "@/app/plugins/swagger";
+import { registerCors } from "@/app/plugins/cors";
+import { registerScalar } from "@/app/plugins/scalar";
+import { loggerConfig } from "@/app/config/logger";
+import { registerRoutes } from "@/app/plugins/routes";
+import { registerWebsocket } from "@/app/plugins/websocket";
 
 export const app = fastify({
   logger: {
@@ -23,3 +24,4 @@ await registerSwagger(app);
 await registerCors(app);
 await registerScalar(app);
 await registerRoutes(app);
+await registerWebsocket(app);

@@ -6,16 +6,126 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/app/database/generated/prisma"
+  output   = "../src/database/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+model Profile {
+  id        String  @id @default(uuid())
+  nickname  String
+  bio       String?
+  avatarUrl String? @map("avatar_url")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String  @unique @map("user_id")
+}
+
 model User {
-  id       Int    @id @default(autoincrement())
-  username String
-  email    String @unique
-  password String
+  id                  String          @id @default(uuid())
+  username            String          @unique
+  email               String          @unique
+  password            String
+  profile             Profile?
+  ownedServers        Server[]
+  serverMembers       ServerMember[]
+  messages            Message[]
+  friendshipRequester Friendship[]    @relation("FriendshipRequester")
+  friendshipAddressee Friendship[]    @relation("FriendshipAddressee")
+  directChannelUserA  DirectChannel[] @relation("DirectChannelUserA")
+  directChannelUserB  DirectChannel[] @relation("DirectChannelUserB")
+}
+
+enum FriendshipRequestState {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+model Friendship {
+  requesterId String
+  requester   User                   @relation("FriendshipRequester", fields: [requesterId], references: [id], onDelete: NoAction)
+  addresseeId String
+  addressee   User                   @relation("FriendshipAddressee", fields: [addresseeId], references: [id], onDelete: NoAction)
+  state       FriendshipRequestState @default(PENDING)
+  requestedAt DateTime               @map("requested_at")
+  acceptedAt  DateTime?              @map("accepted_at")
+  rejectedAt  DateTime?              @map("rejected_at")
+
+  @@id([requesterId, addresseeId])
+}
+
+model Server {
+  id            String         @id @default(uuid())
+  title         String
+  owner         User           @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId       String         @map("owner_id")
+  channels      Channel[]
+  serverMembers ServerMember[]
+
+  @@index([title, ownerId])
+}
+
+enum Role {
+  MOD
+  MEMBER
+  ADMIN
+}
+
+model ServerMember {
+  serverId String  @map("server_id")
+  server   Server  @relation(fields: [serverId], references: [id])
+  userId   String  @map("user_id")
+  user     User    @relation(fields: [userId], references: [id])
+  role     Role    @default(MEMBER)
+  muted    Boolean
+  banned   Boolean
+
+  @@id([serverId, userId])
+  @@map("server_member")
+}
+
+enum ChannelType {
+  TEXT
+  VOICE
+}
+
+model Channel {
+  id       String      @id @default(uuid())
+  title    String
+  server   Server      @relation(fields: [serverId], references: [id])
+  serverId String      @map("server_id")
+  position Int
+  type     ChannelType @default(TEXT)
+  messages Message[]
+
+  @@index([title])
+}
+
+model DirectChannel {
+  id       String    @id @default(uuid())
+  userAId  String    @map("user_a_id")
+  userA    User      @relation("DirectChannelUserA", fields: [userAId], references: [id])
+  userBId  String    @map("user_b_id")
+  userB    User      @relation("DirectChannelUserB", fields: [userBId], references: [id])
+  messages Message[]
+
+  @@unique([userAId, userBId])
+  @@map("direct_channel")
+}
+
+model Message {
+  id              String         @id @default(uuid())
+  sentById        String         @map("sent_by_id")
+  sentBy          User           @relation(fields: [sentById], references: [id])
+  sentAt          DateTime       @map("sent_at")
+  channelId       String?        @map("channel_id")
+  channel         Channel?       @relation(fields: [channelId], references: [id])
+  content         String
+  directChannel   DirectChannel? @relation(fields: [directChannelId], references: [id])
+  directChannelId String
+
+  @@index([content])
 }

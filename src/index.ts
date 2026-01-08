@@ -1,7 +1,7 @@
 import { app } from "@/app/server";
 import "@/env";
 
-const port = Number(process.env.PORT) || 3001;
+const port = Number(process.env.PORT) || 3000;
 const host = process.env.HOST;
 
 try {
