@@ -1,5 +1,5 @@
 {
-  "name": "online-chat",
+  "name": "concord",
   "module": "index.ts",
   "type": "module",
   "private": true,

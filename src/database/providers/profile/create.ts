@@ -10,7 +10,12 @@ export const create = async (
 ): Promise<Profile | null> => {
   const result = await prisma.profile.create({
     data: {
-      ...data,
+      nickname: data.nickname,
+      user: {
+        connect: {
+          id: data.userId,
+        },
+      },
     },
     omit: {
       bio: true,

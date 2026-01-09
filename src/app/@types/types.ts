@@ -11,3 +11,26 @@ export type Profile = {
   bio?: string | null;
   avatarUrl?: string | null;
 };
+
+export type Server = {
+  id: string;
+  title: string;
+  ownerId: string;
+};
+
+export type Friendship = {
+  requesterId: string;
+  addresseeId: string;
+  requestedAt: Date;
+  state: "PENDING" | "ACCEPTED" | "REJECTED" | "BLOCKED";
+  rejectedAt: Date | null;
+  acceptedAt: Date | null;
+};
+
+export type ServerMember = {
+  serverId: string;
+  userId: string;
+  role: "ADMIN" | "MEMBER" | "MOD";
+  banned: boolean;
+  muted: boolean;
+};

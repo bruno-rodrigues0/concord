@@ -20,6 +20,8 @@ model Profile {
   avatarUrl String? @map("avatar_url")
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String  @unique @map("user_id")
+
+  @@map("profile")
 }
 
 model User {
@@ -35,6 +37,8 @@ model User {
   friendshipAddressee Friendship[]    @relation("FriendshipAddressee")
   directChannelUserA  DirectChannel[] @relation("DirectChannelUserA")
   directChannelUserB  DirectChannel[] @relation("DirectChannelUserB")
+
+  @@map("user")
 }
 
 enum FriendshipRequestState {
@@ -55,6 +59,7 @@ model Friendship {
   rejectedAt  DateTime?              @map("rejected_at")
 
   @@id([requesterId, addresseeId])
+  @@map("friendship")
 }
 
 model Server {
@@ -66,6 +71,7 @@ model Server {
   serverMembers ServerMember[]
 
   @@index([title, ownerId])
+  @@map("server")
 }
 
 enum Role {
@@ -76,12 +82,12 @@ enum Role {
 
 model ServerMember {
   serverId String  @map("server_id")
-  server   Server  @relation(fields: [serverId], references: [id])
+  server   Server  @relation(fields: [serverId], references: [id], onDelete: Cascade)
   userId   String  @map("user_id")
-  user     User    @relation(fields: [userId], references: [id])
+  user     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   role     Role    @default(MEMBER)
-  muted    Boolean
-  banned   Boolean
+  muted    Boolean @default(false)
+  banned   Boolean @default(false)
 
   @@id([serverId, userId])
   @@map("server_member")
@@ -95,21 +101,22 @@ enum ChannelType {
 model Channel {
   id       String      @id @default(uuid())
   title    String
-  server   Server      @relation(fields: [serverId], references: [id])
+  server   Server      @relation(fields: [serverId], references: [id], onDelete: Cascade)
   serverId String      @map("server_id")
   position Int
   type     ChannelType @default(TEXT)
   messages Message[]
 
   @@index([title])
+  @@map("channel")
 }
 
 model DirectChannel {
   id       String    @id @default(uuid())
   userAId  String    @map("user_a_id")
-  userA    User      @relation("DirectChannelUserA", fields: [userAId], references: [id])
+  userA    User      @relation("DirectChannelUserA", fields: [userAId], references: [id], onDelete: Cascade)
   userBId  String    @map("user_b_id")
-  userB    User      @relation("DirectChannelUserB", fields: [userBId], references: [id])
+  userB    User      @relation("DirectChannelUserB", fields: [userBId], references: [id], onDelete: Cascade)
   messages Message[]
 
   @@unique([userAId, userBId])
@@ -119,13 +126,14 @@ model DirectChannel {
 model Message {
   id              String         @id @default(uuid())
   sentById        String         @map("sent_by_id")
-  sentBy          User           @relation(fields: [sentById], references: [id])
+  sentBy          User           @relation(fields: [sentById], references: [id], onDelete: Cascade)
   sentAt          DateTime       @map("sent_at")
   channelId       String?        @map("channel_id")
-  channel         Channel?       @relation(fields: [channelId], references: [id])
+  channel         Channel?       @relation(fields: [channelId], references: [id], onDelete: Cascade)
   content         String
-  directChannel   DirectChannel? @relation(fields: [directChannelId], references: [id])
+  directChannel   DirectChannel? @relation(fields: [directChannelId], references: [id], onDelete: Cascade)
   directChannelId String
 
   @@index([content])
+  @@map("message")
 }

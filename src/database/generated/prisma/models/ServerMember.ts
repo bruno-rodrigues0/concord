@@ -234,8 +234,8 @@ export type ServerMemberScalarWhereWithAggregatesInput = {
 
 export type ServerMemberCreateInput = {
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
   server: Prisma.ServerCreateNestedOneWithoutServerMembersInput
   user: Prisma.UserCreateNestedOneWithoutServerMembersInput
 }
@@ -244,8 +244,8 @@ export type ServerMemberUncheckedCreateInput = {
   serverId: string
   userId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberUpdateInput = {
@@ -268,8 +268,8 @@ export type ServerMemberCreateManyInput = {
   serverId: string
   userId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberUpdateManyMutationInput = {
@@ -419,16 +419,16 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type ServerMemberCreateWithoutUserInput = {
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
   server: Prisma.ServerCreateNestedOneWithoutServerMembersInput
 }
 
 export type ServerMemberUncheckedCreateWithoutUserInput = {
   serverId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberCreateOrConnectWithoutUserInput = {
@@ -470,16 +470,16 @@ export type ServerMemberScalarWhereInput = {
 
 export type ServerMemberCreateWithoutServerInput = {
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
   user: Prisma.UserCreateNestedOneWithoutServerMembersInput
 }
 
 export type ServerMemberUncheckedCreateWithoutServerInput = {
   userId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberCreateOrConnectWithoutServerInput = {
@@ -511,8 +511,8 @@ export type ServerMemberUpdateManyWithWhereWithoutServerInput = {
 export type ServerMemberCreateManyUserInput = {
   serverId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberUpdateWithoutUserInput = {
@@ -539,8 +539,8 @@ export type ServerMemberUncheckedUpdateManyWithoutUserInput = {
 export type ServerMemberCreateManyServerInput = {
   userId: string
   role?: $Enums.Role
-  muted: boolean
-  banned: boolean
+  muted?: boolean
+  banned?: boolean
 }
 
 export type ServerMemberUpdateWithoutServerInput = {
