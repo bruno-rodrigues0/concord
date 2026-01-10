@@ -1,7 +1,7 @@
 import type { Friendship } from "@/app/@types/types";
 import { prisma } from "@/database/prisma";
 
-export const create = async (
+export const update = async (
   requesterId: string,
   addresseeId: string,
   data: Partial<Omit<Friendship, "requestedId" | "addresseeId">>,

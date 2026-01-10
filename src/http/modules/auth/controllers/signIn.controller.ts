@@ -4,6 +4,8 @@ import type { SignInBody } from "../auth.schemas";
 import type { User } from "@/app/@types/types";
 import { providers } from "@/database/providers";
 import { app } from "../../../../app/server";
+import { bcryptService } from "../../../../services/bcrypt.service";
+import { is } from "zod/v4/locales";
 
 export const signIn: Controller<{
   Body: SignInBody;
@@ -19,7 +21,12 @@ export const signIn: Controller<{
       });
     }
 
-    if (result.password !== request.body.password) {
+    const isValidPassword = await bcryptService.compare(
+      request.body.password,
+      result.password,
+    );
+
+    if (!isValidPassword) {
       return reply.status(StatusCodes.UNAUTHORIZED).send({
         error: {
           message: "Invalid email or password",
@@ -28,7 +35,10 @@ export const signIn: Controller<{
     }
 
     const accessToken = app.jwt.sign(
-      { uid: result.id, email: result.email },
+      {
+        uid: result.id,
+        email: result.email,
+      },
       {
         expiresIn: "7d",
       },

@@ -14,6 +14,15 @@ export const getAll = async (
     },
     skip: (page - 1) * limit,
     take: limit,
+    include: {
+      owner: true,
+      channels: true,
+      serverMembers: {
+        include: {
+          user: true,
+        },
+      },
+    },
   });
 
   return result;

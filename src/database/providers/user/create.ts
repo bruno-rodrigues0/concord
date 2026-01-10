@@ -1,6 +1,7 @@
 import type { User } from "@/app/@types/types";
 import { prisma } from "@/database/prisma";
 import { bcryptService } from "@/services/bcrypt.service";
+import { ca } from "zod/v4/locales";
 
 type CreateUserProps = Omit<User, "id"> & {
   nickname: string;
@@ -15,9 +16,12 @@ export const create = async (
     return null;
   }
 
-  const result = await prisma.user.create({
+  let result = null;
+
+  result = await prisma.user.create({
     data: {
-      ...data,
+      username: data.username,
+      email: data.email,
       password,
       profile: {
         create: {

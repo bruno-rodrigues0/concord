@@ -7,8 +7,10 @@ import {
 } from "./user.schemas";
 import { getAllUsers } from "./controllers/getAll.controller";
 import { getUserByUsername } from "./controllers/getByUsername.controller";
+import { authHandler } from "@/app/plugins/auth";
 
 export const userRoutes = async (app: FastifyTypedInstance) => {
+  app.register(authHandler);
   app.get(
     "/",
     {

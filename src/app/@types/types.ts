@@ -34,3 +34,17 @@ export type ServerMember = {
   banned: boolean;
   muted: boolean;
 };
+
+export type Channel = {
+  id: string;
+  title: string;
+  serverId: string;
+  position: number;
+  type: "TEXT" | "VOICE";
+};
+
+export type DirectChannel = {
+  id: string;
+  userAId: string;
+  userBId: string;
+};

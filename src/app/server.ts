@@ -10,6 +10,7 @@ import { registerScalar } from "@/app/plugins/scalar";
 import { loggerConfig } from "@/app/config/logger";
 import { registerRoutes } from "@/app/plugins/routes";
 import { registerWebsocket } from "@/app/plugins/websocket";
+import { registerJwt } from "./plugins/jwt";
 
 export const app = fastify({
   logger: {
@@ -25,3 +26,4 @@ await registerCors(app);
 await registerScalar(app);
 await registerRoutes(app);
 await registerWebsocket(app);
+await registerJwt(app);
