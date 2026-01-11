@@ -1,6 +1,18 @@
-# fastfy-api
+# Concord
 
-To install dependencies:
+My own version of discord, implementing the main features.
+
+## Technologies and tools
+
+1. Bun
+1. Typescript
+1. Fastify
+1. Fastify websocket
+1. Zod
+1. Swagger + Scalar
+1. Prisma + Postgresql
+
+## Running locally
 
 ```bash
 bun install
