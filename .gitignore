@@ -37,6 +37,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 bak.*
 
 # Neovim test outputs
-neotest-bun-debug-xml.txt
+neotest*.txt
 
 /prisma/src/app/database/generated/prisma
