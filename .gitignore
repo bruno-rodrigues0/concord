@@ -36,4 +36,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 # Backups
 bak.*
 
+# Neovim test outputs
+neotest-bun-debug-xml.txt
+
 /prisma/src/app/database/generated/prisma
