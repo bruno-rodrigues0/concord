@@ -1,13 +1,16 @@
 import z from "zod";
 import type { FastifyTypedInstance } from "@/app/@types/handlers";
-import { createUser } from "./controllers/create.controller";
+import { createUser } from "./controllers/createUser.controller";
 import {
   createUserBodySchema,
+  getAllUserServersParamsSchema,
   getByUsernameParamsSchema,
 } from "./user.schemas";
-import { getAllUsers } from "./controllers/getAll.controller";
-import { getUserByUsername } from "./controllers/getByUsername.controller";
+import { getAllUsers } from "./controllers/getAllUsers.controller";
+import { getUserByUsername } from "./controllers/getUserByUsername.controller";
 import { authHandler } from "@/app/plugins/auth";
+import { getAllServersByUserQuerySchema } from "../server/server.schemas";
+import { getAllUserServers } from "./controllers/getAllUserServers.controller";
 
 export const userRoutes = async (app: FastifyTypedInstance) => {
   app.register(authHandler);
@@ -63,5 +66,29 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
       },
     },
     createUser,
+  );
+
+  app.get(
+    "/:username/servers",
+    {
+      schema: {
+        tags: ["users"],
+        description: "List all user servers.",
+        params: getAllUserServersParamsSchema,
+        querystring: getAllServersByUserQuerySchema,
+        response: {
+          200: z.array(
+            z.object({
+              server: z.object({
+                id: z.string(),
+                title: z.string(),
+                ownerId: z.string(),
+              }),
+            }),
+          ),
+        },
+      },
+    },
+    getAllUserServers,
   );
 };

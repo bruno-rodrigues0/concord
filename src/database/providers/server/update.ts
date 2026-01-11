@@ -3,8 +3,8 @@ import type { Server } from "@/app/@types/types";
 
 export const update = async (
   id: string,
-  data: Server,
-): Promise<Server | null> => {
+  data: Partial<Omit<Server, "id" | "ownerId">>,
+) => {
   const result = await prisma.server.update({
     where: {
       id,

@@ -1,13 +1,22 @@
 import { StatusCodes } from "http-status-codes";
 import type { Controller } from "@/app/@types/handlers";
-import type { GetByUsernameParams } from "../user.schemas";
+import type {
+  GetByUsernameParams,
+  GetUserBuUsernameQuery,
+} from "../user.schemas";
 import { providers } from "@/database/providers";
 
 export const getUserByUsername: Controller<{
   Params: GetByUsernameParams;
+  Querystring: GetUserBuUsernameQuery;
 }> = async (request, reply) => {
   try {
-    const result = await providers.user.getByUsername(request.params.username);
+    const { username } = request.params;
+    const { include_profile } = request.query;
+    const result = await providers.user.getByUsername(
+      username,
+      include_profile,
+    );
 
     if (result === null) {
       return reply.status(StatusCodes.NOT_FOUND).send({

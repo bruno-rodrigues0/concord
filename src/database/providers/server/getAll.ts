@@ -5,7 +5,7 @@ export const getAll = async (
   page: number = 1,
   limit: number = 25,
   filter: string = "",
-): Promise<Server[] | null> => {
+) => {
   const result = await prisma.server.findMany({
     where: {
       title: {

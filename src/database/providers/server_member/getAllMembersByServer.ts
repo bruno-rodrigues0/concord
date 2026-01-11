@@ -6,7 +6,7 @@ export const getAllMembersByServer = async (
   page: number = 1,
   limit: number = 25,
   filter: string = "",
-): Promise<{ user: User }[] | null> => {
+) => {
   const result = await prisma.serverMember.findMany({
     where: {
       AND: [
