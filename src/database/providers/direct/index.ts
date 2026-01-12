@@ -4,7 +4,7 @@ import { del } from "./delete";
 import { getAll } from "./getAll";
 import { getById } from "./getById";
 
-export const channelProvider = {
+export const directProvider = {
   create,
   getById,
   del,

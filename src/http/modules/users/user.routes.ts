@@ -3,14 +3,23 @@ import type { FastifyTypedInstance } from "@/app/@types/handlers";
 import { createUser } from "./controllers/createUser.controller";
 import {
   createUserBodySchema,
+  deleteUserParamsSchema,
+  getAllUserDirectsParamsSchema,
+  getAllUserFriendsParamsSchema,
   getAllUserServersParamsSchema,
   getByUsernameParamsSchema,
+  updateUserBodySchema,
+  updateUserParamsSchema,
 } from "./user.schemas";
 import { getAllUsers } from "./controllers/getAllUsers.controller";
 import { getUserByUsername } from "./controllers/getUserByUsername.controller";
 import { authHandler } from "@/app/plugins/auth";
 import { getAllServersByUserQuerySchema } from "../server/server.schemas";
 import { getAllUserServers } from "./controllers/getAllUserServers.controller";
+import { deleteUser } from "./controllers/deleteUser.controller";
+import { getAllUserDirects } from "./controllers/getAllUserDirects.controller";
+import { getAllUserFriends } from "./controllers/getAllUserFriends.controller";
+import { updateUser } from "./controllers/updateUser.controller";
 
 export const userRoutes = async (app: FastifyTypedInstance) => {
   app.register(authHandler);
@@ -68,6 +77,22 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
     createUser,
   );
 
+  app.put(
+    "/:username",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Update user.",
+        params: updateUserParamsSchema,
+        body: updateUserBodySchema,
+        response: {
+          200: z.null().describe("User updated."),
+        },
+      },
+    },
+    updateUser,
+  );
+
   app.get(
     "/:username/servers",
     {
@@ -90,5 +115,57 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
       },
     },
     getAllUserServers,
+  );
+
+  app.delete(
+    "/:username",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Delete user.",
+        params: deleteUserParamsSchema,
+        response: {
+          204: z.null().describe("User deleted."),
+        },
+      },
+    },
+    deleteUser,
+  );
+
+  app.get(
+    "/:username/directs",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Get all user direct channels.",
+        params: getAllUserDirectsParamsSchema,
+      },
+    },
+    getAllUserDirects,
+  );
+
+  app.get(
+    "/:username/friends",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Get all user friend requests.",
+        params: getAllUserFriendsParamsSchema,
+        querystring: getAllServersByUserQuerySchema,
+        response: {
+          200: z.array(
+            z.object({
+              requesterId: z.string(),
+              addresseeId: z.string(),
+              requestedAt: z.date(),
+              state: z.enum(["PENDING", "ACCEPTED", "REJECTED", "BLOCKED"]),
+              rejectedAt: z.date().nullable(),
+              acceptedAt: z.date().nullable(),
+            }),
+          ),
+        },
+      },
+    },
+    getAllUserFriends,
   );
 };
