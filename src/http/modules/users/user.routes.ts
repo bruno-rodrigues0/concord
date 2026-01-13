@@ -59,6 +59,22 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
     updateUser,
   );
 
+  app.put(
+    "/:username",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Update user.",
+        params: updateUserParamsSchema,
+        body: updateUserBodySchema,
+        response: {
+          200: z.null().describe("User updated."),
+        },
+      },
+    },
+    updateUser,
+  );
+
   app.get(
     "/:username/servers",
     {
