@@ -435,14 +435,6 @@ export type EnumFriendshipRequestStateFieldUpdateOperationsInput = {
   set?: $Enums.FriendshipRequestState
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
-}
-
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type FriendshipCreateWithoutRequesterInput = {
   state?: $Enums.FriendshipRequestState
   requestedAt: Date | string

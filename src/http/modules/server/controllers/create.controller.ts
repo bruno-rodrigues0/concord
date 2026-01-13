@@ -17,7 +17,7 @@ export const createServer: Controller<{
       });
     }
 
-    return reply.status(StatusCodes.CREATED).send(result);
+    return reply.status(StatusCodes.CREATED).send();
   } catch (error) {
     return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error });
   }

@@ -13,23 +13,16 @@ datasource db {
   provider = "postgresql"
 }
 
-model Profile {
-  id        String  @id @default(uuid())
-  nickname  String
-  bio       String?
-  avatarUrl String? @map("avatar_url")
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String  @unique @map("user_id")
-
-  @@map("profile")
-}
-
 model User {
-  id                  String          @id @default(uuid())
-  username            String          @unique
-  email               String          @unique
-  password            String
-  profile             Profile?
+  id                  String          @id
+  name                String
+  email               String
+  emailVerified       Boolean         @default(false)
+  image               String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  sessions            Session[]
+  accounts            Account[]
   ownedServers        Server[]
   serverMembers       ServerMember[]
   messages            Message[]
@@ -38,7 +31,56 @@ model User {
   directChannelUserA  DirectChannel[] @relation("DirectChannelUserA")
   directChannelUserB  DirectChannel[] @relation("DirectChannelUserB")
 
+  @@unique([email])
   @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
 
 enum FriendshipRequestState {

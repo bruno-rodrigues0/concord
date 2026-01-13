@@ -1,26 +1,26 @@
 import z from "zod";
 import type { FastifyTypedInstance } from "@/app/@types/handlers";
-import { authHandler } from "@/app/plugins/auth";
 import { getAllServersByUser } from "./controllers/getAllServersByUser.controller";
 import {
   createServerBodySchema,
   deleteServerParamsSchema,
-  getAllServersByUserQuerySchema,
+  getAllServersByUserParamsSchema,
   updateServerBodySchema,
 } from "./server.schemas";
 import { createServer } from "./controllers/create.controller";
 import { deleteServer } from "./controllers/delete.controller";
 import { updateServer } from "./controllers/update.controller";
+import { authGuard } from "../../../app/plugins/auth-guard";
 
 export const serverRoutes = async (app: FastifyTypedInstance) => {
-  app.register(authHandler);
+  app.register(authGuard);
   app.get(
-    "/:id",
+    "/:userId",
     {
       schema: {
         tags: ["servers"],
         description: "List all servers by user id.",
-        querystring: getAllServersByUserQuerySchema,
+        params: getAllServersByUserParamsSchema,
         response: {
           200: z.array(
             z.object({

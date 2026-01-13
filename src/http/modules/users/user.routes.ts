@@ -8,12 +8,12 @@ import {
 } from "./user.schemas";
 import { getAllUsers } from "./controllers/getAllUsers.controller";
 import { getUserByUsername } from "./controllers/getUserByUsername.controller";
-import { authHandler } from "@/app/plugins/auth";
-import { getAllServersByUserQuerySchema } from "../server/server.schemas";
+import { getAllServersByUserParamsSchema } from "../server/server.schemas";
 import { getAllUserServers } from "./controllers/getAllUserServers.controller";
+import { authGuard } from "../../../app/plugins/auth-guard";
 
 export const userRoutes = async (app: FastifyTypedInstance) => {
-  app.register(authHandler);
+  app.register(authGuard);
   app.get(
     "/",
     {
@@ -75,7 +75,7 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
         tags: ["users"],
         description: "List all user servers.",
         params: getAllUserServersParamsSchema,
-        querystring: getAllServersByUserQuerySchema,
+        querystring: getAllServersByUserParamsSchema,
         response: {
           200: z.array(
             z.object({

@@ -1,26 +1,14 @@
-import fastifyPlugin from "fastify-plugin";
-import { StatusCodes } from "http-status-codes";
+import { betterAuth } from "better-auth";
+import { prisma } from "@/database/prisma";
+import { prismaAdapter } from "better-auth/adapters/prisma";
 
-export const authHandler = fastifyPlugin(async (app) => {
-  app.addHook("onRequest", async (request, reply) => {
-    let decodedToken: { uid: string; email: string; iat: number };
-
-    if (!request.headers.authorization) {
-      return reply.status(StatusCodes.UNAUTHORIZED).send({
-        error: {
-          message: "Access denied.",
-        },
-      });
-    }
-
-    try {
-      decodedToken = await request.jwtVerify();
-    } catch (error) {
-      return reply.status(StatusCodes.UNAUTHORIZED).send({
-        error: {
-          message: "Invalid token.",
-        },
-      });
-    }
-  });
+export const auth = betterAuth({
+  basePath: "/auth",
+  trustedOrigins: ["http://localhost:5173"],
+  emailAndPassword: {
+    enabled: true,
+  },
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+  }),
 });
