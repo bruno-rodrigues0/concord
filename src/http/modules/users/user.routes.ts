@@ -1,22 +1,17 @@
 import z from "zod";
 import type { FastifyTypedInstance } from "@/app/@types/handlers";
-import { createUser } from "./controllers/createUser.controller";
 import {
-  createUserBodySchema,
-  deleteUserParamsSchema,
   getAllUserDirectsParamsSchema,
   getAllUserFriendsParamsSchema,
   getAllUserServersParamsSchema,
-  getByUsernameParamsSchema,
+  getAllUsersQuerySchema,
   updateUserBodySchema,
   updateUserParamsSchema,
 } from "./user.schemas";
 import { getAllUsers } from "./controllers/getAllUsers.controller";
-import { getUserByUsername } from "./controllers/getUserByUsername.controller";
 import { getAllServersByUserParamsSchema } from "../server/server.schemas";
 import { getAllUserServers } from "./controllers/getAllUserServers.controller";
-import { authGuard } from "../../../app/plugins/auth-guard";
-import { deleteUser } from "./controllers/deleteUser.controller";
+import { authGuard } from "@/app/plugins/auth-guard";
 import { getAllUserDirects } from "./controllers/getAllUserDirects.controller";
 import { getAllUserFriends } from "./controllers/getAllUserFriends.controller";
 import { updateUser } from "./controllers/updateUser.controller";
@@ -29,12 +24,17 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
       schema: {
         tags: ["users"],
         description: "List all users.",
+        querystring: getAllUsersQuerySchema,
         response: {
           200: z.array(
             z.object({
               id: z.string(),
-              username: z.string(),
+              name: z.string(),
               email: z.string(),
+              emailVerified: z.boolean(),
+              image: z.string().nullable(),
+              createdAt: z.date(),
+              updatedAt: z.date(),
             }),
           ),
         },
@@ -43,42 +43,8 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
     getAllUsers,
   );
 
-  app.get(
-    "/:username",
-    {
-      schema: {
-        tags: ["users"],
-        description: "List users.",
-        params: getByUsernameParamsSchema,
-        response: {
-          200: z.object({
-            id: z.string(),
-            username: z.string(),
-            email: z.string(),
-          }),
-        },
-      },
-    },
-    getUserByUsername,
-  );
-
-  app.post(
-    "/",
-    {
-      schema: {
-        description: "Create a new user",
-        tags: ["users"],
-        body: createUserBodySchema,
-        response: {
-          201: z.null().describe("User created."),
-        },
-      },
-    },
-    createUser,
-  );
-
   app.put(
-    "/:username",
+    "/:id",
     {
       schema: {
         tags: ["users"],
@@ -115,21 +81,6 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
       },
     },
     getAllUserServers,
-  );
-
-  app.delete(
-    "/:username",
-    {
-      schema: {
-        tags: ["users"],
-        description: "Delete user.",
-        params: deleteUserParamsSchema,
-        response: {
-          204: z.null().describe("User deleted."),
-        },
-      },
-    },
-    deleteUser,
   );
 
   app.get(

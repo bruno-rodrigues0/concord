@@ -8,9 +8,9 @@ export const updateUser: Controller<{
   Body: UpdateUserBody;
 }> = async (request, reply) => {
   try {
-    const { username } = request.params;
+    const { id } = request.params;
     const data = request.body;
-    const result = await providers.user.update(username, data);
+    const result = await providers.user.update(id, data);
 
     if (result === null) {
       return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({

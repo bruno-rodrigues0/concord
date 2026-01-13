@@ -1,15 +1,11 @@
 export type User = {
   id: string;
-  username: string;
+  name: string;
   email: string;
-  password: string;
-};
-
-export type Profile = {
-  id: string;
-  nickname: string;
-  bio?: string | null;
-  avatarUrl?: string | null;
+  emailVerified: boolean;
+  image?: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Server = {

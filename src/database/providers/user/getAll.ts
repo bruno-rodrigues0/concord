@@ -1,11 +1,16 @@
-import type { User } from "@/app/@types/types";
-import { prisma } from "../../prisma";
+import { prisma } from "@/database/prisma";
 
-export const getAll = async (): Promise<Omit<User, "password">[] | null> => {
+export const getAll = async (
+  page: number = 1,
+  limit: number = 25,
+  filter: string = "",
+) => {
   const result = await prisma.user.findMany({
-    omit: {
-      password: true,
+    where: {
+      name: { contains: filter },
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
 
   return result;
