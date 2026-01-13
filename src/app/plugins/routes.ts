@@ -4,7 +4,7 @@ import { authRoutes } from "../../http/modules/auth/auth.routes";
 import { serverRoutes } from "../../http/modules/server/server.routes";
 
 export const registerRoutes = fastifyPlugin(async (app) => {
-  app.register(userRoutes, { prefix: "/users" });
   app.register(authRoutes, { prefix: "/auth" });
+  app.register(userRoutes, { prefix: "/users" });
   app.register(serverRoutes, { prefix: "/servers" });
 });

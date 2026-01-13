@@ -413,10 +413,6 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type ServerMemberCreateWithoutUserInput = {
   role?: $Enums.Role
   muted?: boolean

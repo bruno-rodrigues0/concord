@@ -8,8 +8,10 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Profile.ts'
 export type * from './models/User.ts'
+export type * from './models/Session.ts'
+export type * from './models/Account.ts'
+export type * from './models/Verification.ts'
 export type * from './models/Friendship.ts'
 export type * from './models/Server.ts'
 export type * from './models/ServerMember.ts'
