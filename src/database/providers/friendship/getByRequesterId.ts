@@ -1,23 +1,26 @@
 import { prisma } from "@/database/prisma";
-import type { Friendship } from "@/app/@types/types";
 
 export const getByRequesterId = async (
   requesterId: string,
+  page: number = 1,
+  limit: number = 25,
   filter: string = "",
-): Promise<Friendship[] | null> => {
+) => {
   const result = await prisma.friendship.findMany({
     where: {
       requesterId,
       OR: [
         {
           addressee: {
-            username: {
+            name: {
               contains: filter,
             },
           },
         },
       ],
     },
+    skip: (page - 1) * limit,
+    take: limit,
   });
 
   return result;

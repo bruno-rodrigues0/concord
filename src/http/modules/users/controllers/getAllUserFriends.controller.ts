@@ -11,10 +11,12 @@ export const getAllUserFriends: Controller<{
   Params: GetAllUserFriendsParams;
 }> = async (request, reply) => {
   try {
-    const { username } = request.params;
-    const { filter } = request.query;
+    const { id } = request.params;
+    const { page, limit, filter } = request.query;
     const result = await providers.friendship.getByRequesterId(
-      username,
+      id,
+      page,
+      limit,
       filter,
     );
 

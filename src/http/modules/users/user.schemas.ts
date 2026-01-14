@@ -41,12 +41,26 @@ export const createDirectChannelBodySchema = z.object({
 
 export const createDirectChannelParamsSchema = defaultUserParamsSchema;
 
-export const getAllUserDirectsParamsSchema = defaultUserParamsSchema;
+export const getAllUserDirectsQuerySchema = defaultUserQuerySchema;
 
 export const getAllUserFriendsParamsSchema = defaultUserParamsSchema;
 
-export const getAllUserFriendsQuerySchema = z.object({
-  filter: z.string().default(""),
+export const getAllUserFriendsQuerySchema = defaultUserQuerySchema;
+
+export const createFriendshipRequestParamsSchema = defaultUserParamsSchema;
+export const createFriendshipRequestBodySchema = z.object({
+  addresseeId: z.uuid(),
+});
+
+export const updateFriendshipRequestParamsSchema = z.object({
+  id: z.uuid(),
+  addresseeId: z.uuid(),
+});
+
+export const updateFriendshipRequestBodySchema = z.object({
+  state: z.optional(z.enum(["PENDING", "ACCEPTED", "REJECTED", "BLOCKED"])),
+  rejectedAt: z.optional(z.date().nullable()),
+  acceptedAt: z.optional(z.date().nullable()),
 });
 
 export type GetAllUserServersQuery = z.infer<
@@ -61,8 +75,8 @@ export type CreateDirectChannelBody = z.infer<
 export type CreateDirectChannelParams = z.infer<
   typeof createDirectChannelParamsSchema
 >;
-export type GetAllUserDirectsParams = z.infer<
-  typeof getAllUserDirectsParamsSchema
+export type GetAllUserDirectsQuery = z.infer<
+  typeof getAllUserDirectsQuerySchema
 >;
 export type GetAllUserFriendsParams = z.infer<
   typeof getAllUserFriendsParamsSchema
@@ -73,3 +87,16 @@ export type GetAllUserFriendsQuery = z.infer<
 export type UpdateUserParams = z.infer<typeof updateUserParamsSchema>;
 export type UpdateUserBody = z.infer<typeof updateUserBodySchema>;
 export type GetAllUsers = z.infer<typeof getAllUsersQuerySchema>;
+export type CreateFriendshipRequestParams = z.infer<
+  typeof createFriendshipRequestParamsSchema
+>;
+export type CreateFriendshipRequestBody = z.infer<
+  typeof createFriendshipRequestBodySchema
+>;
+
+export type UpdateFriendshipRequestParams = z.infer<
+  typeof updateFriendshipRequestParamsSchema
+>;
+export type UpdateFriendshipRequestBody = z.infer<
+  typeof updateFriendshipRequestBodySchema
+>;

@@ -12,8 +12,8 @@ export const createDirectChannel: Controller<{
 }> = async (request, reply) => {
   try {
     const { userBId } = request.body;
-    const { username } = request.params;
-    const result = await providers.direct.create(username, userBId);
+    const { id } = request.params;
+    const result = await providers.direct.create(id, userBId);
 
     if (result === null) {
       return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({

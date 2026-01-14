@@ -1,10 +1,14 @@
 import z from "zod";
 import type { FastifyTypedInstance } from "@/app/@types/handlers";
 import {
-  getAllUserDirectsParamsSchema,
+  createFriendshipRequestBodySchema,
+  createFriendshipRequestParamsSchema,
+  getAllUserDirectsQuerySchema,
   getAllUserFriendsParamsSchema,
   getAllUserServersParamsSchema,
   getAllUsersQuerySchema,
+  updateFriendshipRequestBodySchema,
+  updateFriendshipRequestParamsSchema,
   updateUserBodySchema,
   updateUserParamsSchema,
 } from "./user.schemas";
@@ -15,6 +19,8 @@ import { authGuard } from "@/app/plugins/auth-guard";
 import { getAllUserDirects } from "./controllers/getAllUserDirects.controller";
 import { getAllUserFriends } from "./controllers/getAllUserFriends.controller";
 import { updateUser } from "./controllers/updateUser.controller";
+import { createFriendshipRequest } from "./controllers/createFriendshipRequest.controller";
+import { updateFriendshipRequest } from "./controllers/updateFriendshipRequest.controller";
 
 export const userRoutes = async (app: FastifyTypedInstance) => {
   app.register(authGuard);
@@ -59,24 +65,8 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
     updateUser,
   );
 
-  app.put(
-    "/:username",
-    {
-      schema: {
-        tags: ["users"],
-        description: "Update user.",
-        params: updateUserParamsSchema,
-        body: updateUserBodySchema,
-        response: {
-          200: z.null().describe("User updated."),
-        },
-      },
-    },
-    updateUser,
-  );
-
   app.get(
-    "/:username/servers",
+    "/:id/servers",
     {
       schema: {
         tags: ["users"],
@@ -100,19 +90,19 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
   );
 
   app.get(
-    "/:username/directs",
+    "/:id/directs",
     {
       schema: {
         tags: ["users"],
         description: "Get all user direct channels.",
-        params: getAllUserDirectsParamsSchema,
+        querystring: getAllUserDirectsQuerySchema,
       },
     },
     getAllUserDirects,
   );
 
   app.get(
-    "/:username/friends",
+    "/:id/friends",
     {
       schema: {
         tags: ["users"],
@@ -134,5 +124,37 @@ export const userRoutes = async (app: FastifyTypedInstance) => {
       },
     },
     getAllUserFriends,
+  );
+
+  app.post(
+    "/:id/friends/:addresseeId",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Send a friendship invitation.",
+        body: createFriendshipRequestBodySchema,
+        params: createFriendshipRequestParamsSchema,
+        response: {
+          200: z.null().describe("Request sended."),
+        },
+      },
+    },
+    createFriendshipRequest,
+  );
+
+  app.put(
+    "/:id/friends/:addresseeId",
+    {
+      schema: {
+        tags: ["users"],
+        description: "Update a friendship request state.",
+        params: updateFriendshipRequestParamsSchema,
+        body: updateFriendshipRequestBodySchema,
+        response: {
+          200: z.null().describe("Friendship state updated."),
+        },
+      },
+    },
+    updateFriendshipRequest,
   );
 };

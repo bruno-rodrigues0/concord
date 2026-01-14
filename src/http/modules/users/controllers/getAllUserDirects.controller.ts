@@ -1,14 +1,14 @@
 import { StatusCodes } from "http-status-codes";
-import type { Controller } from "../../../../app/@types/handlers";
-import { providers } from "../../../../database/providers";
-import type { GetAllUserDirectsParams } from "../user.schemas";
+import type { Controller } from "@/app/@types/handlers";
+import { providers } from "@/database/providers";
+import type { GetAllUserDirectsQuery } from "../user.schemas";
 
 export const getAllUserDirects: Controller<{
-  Params: GetAllUserDirectsParams;
+  Querystring: GetAllUserDirectsQuery;
 }> = async (request, reply) => {
   try {
-    const { username } = request.params;
-    const result = await providers.direct.getAll(username);
+    const { page, limit, filter } = request.query;
+    const result = await providers.direct.getAll(page, limit, filter);
 
     if (result === null) {
     }
