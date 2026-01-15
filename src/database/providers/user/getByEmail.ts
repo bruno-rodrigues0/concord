@@ -1,7 +1,6 @@
-import type { User } from "@/app/@types/types";
-import { prisma } from "../../prisma";
+import { prisma } from "@/database/prisma";
 
-export const getByEmail = async (email: string): Promise<User | null> => {
+export const getByEmail = async (email: string) => {
   const result = await prisma.user.findUnique({
     where: {
       email,

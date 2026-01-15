@@ -1,4 +1,5 @@
 import { channelProvider } from "./channel";
+import { directProvider } from "./direct";
 import { friendshipProvider } from "./friendship";
 import { profileProvider } from "./profile";
 import { serverProvider } from "./server";
@@ -12,4 +13,5 @@ export const providers = {
   serverMember: serverMemberProvider,
   friendship: friendshipProvider,
   channel: channelProvider,
+  direct: directProvider,
 };

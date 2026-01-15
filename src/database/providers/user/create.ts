@@ -1,7 +1,6 @@
 import type { User } from "@/app/@types/types";
 import { prisma } from "@/database/prisma";
 import { bcryptService } from "@/services/bcrypt.service";
-import { ca } from "zod/v4/locales";
 
 type CreateUserProps = Omit<User, "id"> & {
   nickname: string;

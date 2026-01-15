@@ -1,16 +1,11 @@
-import type { DirectChannel } from "@/app/@types/types";
 import { prisma } from "@/database/prisma";
 
-export const create = async (
-  data: Omit<DirectChannel, "id">,
-): Promise<DirectChannel | null> => {
-  const { userAId, userBId } = data;
-
+export const create = async (username: string, userBId: string) => {
   const result = await prisma.directChannel.create({
     data: {
       userA: {
         connect: {
-          id: userAId,
+          username: username,
         },
       },
       userB: {

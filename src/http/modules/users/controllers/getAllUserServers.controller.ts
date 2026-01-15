@@ -11,10 +11,10 @@ export const getAllUserServers: Controller<{
   Querystring: GetAllUserServersQuery;
 }> = async (request, reply) => {
   try {
-    const { username } = request.params;
+    const { id } = request.params;
     const { page, limit, filter } = request.query;
     const result = await providers.serverMember.getAllServerByMember(
-      username,
+      id,
       page,
       limit,
       filter,

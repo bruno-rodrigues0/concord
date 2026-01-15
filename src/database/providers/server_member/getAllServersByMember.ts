@@ -1,8 +1,7 @@
-import type { Server } from "@/app/@types/types";
 import { prisma } from "../../prisma";
 
 export const getAllServerByMember = async (
-  username: string,
+  id: string,
   page: number = 1,
   limit: number = 25,
   filter: string = "",
@@ -12,7 +11,7 @@ export const getAllServerByMember = async (
       AND: [
         {
           user: {
-            username,
+            id,
           },
         },
         {

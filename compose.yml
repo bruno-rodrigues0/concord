@@ -1,0 +1,59 @@
+x-srv-concord-base: &srv-concord-base
+  build: .
+  networks:
+    - concord-nw
+  depends_on:
+    - concord-db
+  environment:
+    NDOE_ENV: "dev"
+    PORT: 3000
+    HOST: "0.0.0.0"
+    DOTENV_CONFIG_QUIET: true
+    DATABASE_URL: "postgresql://postgres:1977@concord-db:5432/concord?schema=public"
+    COOKIE_SECRET: "0d491df9a02e30bcd1476eb2cfc0e53642dc95510cd8404126226cbecc5f5244"
+    BETTER_AUTH_SECRET: "c35343322ffde459bdd024e1f42fc6ae92f3cd7745d10c1a576f21de0c3c2421"
+    BETTER_AUTH_URL: "http://localhost:3000"
+
+services:
+  concord-nginx:
+    build: ./nginx
+    container_name: concord_nginx
+    ports:
+      - 80:80
+    networks:
+      - concord-nw
+    volumes:
+      - nginx_data:/usr/share/nginx/html
+    depends_on:
+      - srv1-concord
+      - srv2-concord
+
+  srv1-concord:
+    <<: *srv-concord-base
+    container_name: srv1_concord
+
+  srv2-concord:
+    <<: *srv-concord-base
+    container_name: srv2_concord
+
+  concord-db:
+    image: postgres:16-alpine
+    container_name: concord_db
+    ports:
+      - 5432:5432
+    volumes:
+      - concord_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1977
+      POSTGRES_DB: concord
+    networks:
+      - concord-nw
+
+networks:
+  concord-nw:
+    driver: bridge
+
+volumes:
+  concord_data:
+  nginx_data:

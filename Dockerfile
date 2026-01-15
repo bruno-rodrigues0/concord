@@ -11,5 +11,5 @@ COPY --chown=bun:bun . .
 
 EXPOSE 3000
 
-CMD ["bun",  "run", "dev"]
+CMD ["sh", "-c", "bunx prisma db push && bun run dev"]
 
