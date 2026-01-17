@@ -1,4 +1,3 @@
-import type { ServerMember, User } from "@/app/@types/types";
 import { prisma } from "../../prisma";
 
 export const getAllMembersByServer = async (
@@ -17,12 +16,7 @@ export const getAllMembersByServer = async (
           user: {
             OR: [
               {
-                username: { contains: filter },
-              },
-              {
-                profile: {
-                  nickname: { contains: filter },
-                },
+                name: { contains: filter },
               },
             ],
           },
