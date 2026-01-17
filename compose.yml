@@ -20,6 +20,7 @@ services:
     container_name: concord_nginx
     ports:
       - 80:80
+      - 443:443
     networks:
       - concord-nw
     volumes:

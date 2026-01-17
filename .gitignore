@@ -40,3 +40,8 @@ bak.*
 neotest*.txt
 
 /prisma/src/app/database/generated/prisma
+
+
+# SSL
+concord-certificate.crt
+concord-private.key
