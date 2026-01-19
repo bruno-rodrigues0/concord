@@ -1,20 +1,17 @@
 import { StatusCodes } from "http-status-codes";
 import type { Controller } from "@/app/@types/handlers";
 import { providers } from "@/database/providers";
-import type {
-  UpdateServerMemberBody,
-  UpdateServerMemberParams,
-} from "../server.schemas";
+import type { UpdateServerBody, UpdateServerParams } from "../server.schemas";
 
 export const updateServer: Controller<{
-  Params: UpdateServerMemberParams;
-  Body: UpdateServerMemberBody;
+  Params: UpdateServerParams;
+  Body: UpdateServerBody;
 }> = async (request, reply) => {
   try {
-    const { id, userId } = request.params;
+    const { id } = request.params;
     const data = request.body;
 
-    const result = await providers.serverMember.update(id, userId, data);
+    const result = await providers.server.update(id, data);
 
     if (result === null) {
       return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({

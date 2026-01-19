@@ -1,10 +1,10 @@
 import z from "zod";
 
-const defaultServerParamsSchema = z.object({
+export const defaultServerParamsSchema = z.object({
   id: z.uuid(),
 });
 
-const defaultServerQuerySchema = z.object({
+export const defaultServerQuerySchema = z.object({
   page: z.coerce.number().int().positive().min(1).default(1),
   limit: z.coerce.number().int().positive().min(1).default(25),
   filter: z.string().default("").describe("User filter."),
@@ -44,6 +44,11 @@ export const updateServerMemberBodySchema = z.object({
   banned: z.optional(z.boolean()),
 });
 
+export const deleteMemberParamsSchema = z.object({
+  id: z.uuid(),
+  userId: z.uuid(),
+});
+
 export const getAllServerMembersParamsSchema = defaultServerParamsSchema;
 export const getAllServerMembersQuerySchema = defaultServerQuerySchema;
 
@@ -70,3 +75,4 @@ export type UpdateServerMemberParams = z.infer<
 export type UpdateServerMemberBody = z.infer<
   typeof updateServerMemberBodySchema
 >;
+export type DeleteMemberParams = z.infer<typeof deleteMemberParamsSchema>;
