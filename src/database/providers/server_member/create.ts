@@ -1,17 +1,16 @@
 import { prisma } from "@/database/prisma";
-import type { ServerMember } from "@/app/@types/types";
 
-export const create = async (data: ServerMember) => {
+export const create = async (serverId: string, userId: string) => {
   const result = await prisma.serverMember.create({
     data: {
       user: {
         connect: {
-          id: data.userId,
+          id: userId,
         },
       },
       server: {
         connect: {
-          id: data.serverId,
+          id: serverId,
         },
       },
     },

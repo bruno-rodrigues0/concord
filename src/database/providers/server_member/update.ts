@@ -4,7 +4,7 @@ import type { ServerMember } from "@/app/@types/types";
 export const update = async (
   serverId: string,
   userId: string,
-  data: Omit<ServerMember, "serverId" | "userId">,
+  data: Partial<Omit<ServerMember, "serverId" | "userId">>,
 ) => {
   const result = await prisma.serverMember.update({
     where: {

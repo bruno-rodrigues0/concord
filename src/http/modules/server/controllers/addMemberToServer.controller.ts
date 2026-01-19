@@ -1,25 +1,24 @@
-import { StatusCodes } from "http-status-codes";
 import type { Controller } from "@/app/@types/handlers";
+import { StatusCodes } from "http-status-codes";
 import { providers } from "@/database/providers";
 import type {
-  UpdateServerMemberBody,
-  UpdateServerMemberParams,
+  AddMemberToServerBody,
+  DefaultServerParams,
 } from "../server.schemas";
 
-export const updateServer: Controller<{
-  Params: UpdateServerMemberParams;
-  Body: UpdateServerMemberBody;
+export const addMemberToServer: Controller<{
+  Body: AddMemberToServerBody;
+  Params: DefaultServerParams;
 }> = async (request, reply) => {
   try {
-    const { id, userId } = request.params;
-    const data = request.body;
-
-    const result = await providers.serverMember.update(id, userId, data);
+    const { id } = request.params;
+    const { userId } = request.body;
+    const result = await providers.serverMember.create(id, userId);
 
     if (result === null) {
       return reply.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
         error: {
-          message: "Error while updating record.",
+          message: "Erro while creating record.",
         },
       });
     }
