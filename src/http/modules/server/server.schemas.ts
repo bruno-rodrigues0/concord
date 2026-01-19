@@ -33,6 +33,17 @@ export const addMemberToServerBodySchema = z.object({
   userId: z.uuid(),
 });
 
+export const updateServerMemberParamsSchema = z.object({
+  id: z.uuid(),
+  userId: z.uuid(),
+});
+
+export const updateServerMemberBodySchema = z.object({
+  role: z.optional(z.enum(["MEMBER", "ADMIN", "MOD"])),
+  muted: z.optional(z.boolean()),
+  banned: z.optional(z.boolean()),
+});
+
 export const getAllServerMembersParamsSchema = defaultServerParamsSchema;
 export const getAllServerMembersQuerySchema = defaultServerQuerySchema;
 
@@ -53,3 +64,9 @@ export type GetAllServerMembersQuery = z.infer<
 export type DefaultServerParams = z.infer<typeof defaultServerParamsSchema>;
 export type DefaultServerQuery = z.infer<typeof defaultServerQuerySchema>;
 export type AddMemberToServerBody = z.infer<typeof addMemberToServerBodySchema>;
+export type UpdateServerMemberParams = z.infer<
+  typeof updateServerMemberParamsSchema
+>;
+export type UpdateServerMemberBody = z.infer<
+  typeof updateServerMemberBodySchema
+>;
